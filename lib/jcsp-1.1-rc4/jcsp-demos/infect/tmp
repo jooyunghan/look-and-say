@@ -1,0 +1,24 @@
+    width = graphicsDim.width;
+    height = graphicsDim.height;
+
+    pixels = new byte[width*height];
+
+    cell = new byte[height][width];
+    last_cell = new byte[height][width];
+
+    final ColorModel model = createColorModel ();
+
+    final MemoryImageSource mis =
+      new MemoryImageSource (width, height, model, pixels, 0, width);
+    mis.setAnimated (true);
+    mis.setFullBufferUpdates (true);
+
+    toGraphics.write (new GraphicsProtocol.MakeMISImage (mis));
+    final Image image = (Image) fromGraphics.read ();
+
+    final DisplayList display = new DisplayList ();
+    toGraphics.write (new GraphicsProtocol.SetPaintable (display));
+    fromGraphics.read ();
+
+    final GraphicsCommand[] drawImage = {new GraphicsCommand.DrawImage (image, 0, 0)};
+    display.set (drawImage);

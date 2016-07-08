@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jcsp-1.1-rc4" level="project" />
+    <orderEntry type="library" name="jcsp" level="project" />
   </component>
 </module>
