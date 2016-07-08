@@ -46,4 +46,17 @@ public class Lists {
         }
         return groups;
     }
+
+    static public <A> List<Pair<A, Integer>> runLength(List<A> as) {
+        final List<Pair<A, Integer>> pairs = new ArrayList<>();
+        Pair<A, Integer> last = null;
+        for (A a : as) {
+            if (last == null || !last._1.equals(a)) {
+                pairs.add(last = new Pair(a, 1));
+            } else {
+                last._2++;
+            }
+        }
+        return pairs;
+    }
 }
