@@ -26,6 +26,7 @@ class Init implements Ant {
 class Next implements Ant {
 
     enum State {INIT, HAS_NEXT, COUNT, LAST}
+
     private Iterator<Integer> inner;
     private State state;
     private int elem;
@@ -78,10 +79,28 @@ public class IteratorAnt {
 
     public static void main(String[] args) {
         Ant ant = new Init();
-        for (int i=0; i<100; i++)
+
+        for (int i = 0; i < 4948; i++)
             ant = new Next(ant);
-        while (ant.hasNext()) {
-            System.out.print(ant.next());
-        }
+
+        for (int i = 0; i < 4948; i++)
+            ant.next();
+
+        System.out.print(ant.next());
     }
 }
+
+/*
+
+n == 4948에서 StackOverflowError
+
+Exception in thread "main" java.lang.StackOverflowError
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:26)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:50)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:26)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:50)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:26)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:50)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:26)
+	at com.jooyunghan.lookandsay.Next.next(IteratorAnt.java:50)
+ */
