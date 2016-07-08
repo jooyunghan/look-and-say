@@ -8,7 +8,7 @@ import static java.lang.System.out;
 import static java.util.stream.Stream.iterate;
 
 
-public class Java8Ant {
+public class Java8Main {
     // using java8 stream
     // 이건 lazy stream이긴 하다
     // 그러나 Scala stream과 같은 실제 list가 아니라
@@ -19,7 +19,7 @@ public class Java8Ant {
     }
 
     private static Stream<List<Integer>> antSequence() {
-        return iterate(of(1), Java8Ant::next3);
+        return iterate(of(1), Java8Main::next3);
     }
 
     public static List<Integer> next(List<Integer> sequence) {

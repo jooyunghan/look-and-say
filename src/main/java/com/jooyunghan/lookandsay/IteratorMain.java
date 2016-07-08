@@ -75,7 +75,7 @@ class Next implements Ant {
     }
 }
 
-public class IteratorAnt {
+public class IteratorMain {
 
     public static void main(String[] args) {
         Ant ant = new Init();
