@@ -41,5 +41,11 @@ function length(gen) {
   return count
 }
 
+function nth(n,gen) {
+  while (n --> 0)
+    gen.next()
+  return gen.next().value
+}
+
 //print(ant(100))
-console.log(length(ant(100)))
+console.log(nth(1000000, ant(5941))) // maximum value without StackOverflow
