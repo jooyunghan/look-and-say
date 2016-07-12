@@ -8,6 +8,9 @@ Pure.prototype = {
   },
   flatMap(f) {
     return f(this.value)
+  },
+  toString() {
+    return `Pure`
   }
 }
 function Read(cont) {
@@ -19,6 +22,9 @@ Read.prototype = {
   },
   flatMap(f) { // f :: a -> Read<B>
     return new Read(x => this.cont(x).flatMap(f))
+  },
+  toString() {
+    return `Read <>`
   }
 }
 function Write(value, cont) {
@@ -31,6 +37,9 @@ Write.prototype = {
   },
   flatMap(f) {
     return new Write(this.value, this.cont.flatMap(f))
+  },
+  toString() {
+    return `Write ${this.value} ${this.cont}`
   }
 }
 
@@ -42,17 +51,12 @@ function nth(n) {
   return read().flatMap(x => (n === 0) ? write(x) : nth(n - 1))
 }
 
-// CPS 방식은 추가적인 abstraction이 가능하다.
-// function write2(v1, v2, cont) {
-//   return write(v1, () => write(v2, cont))
-// }
-
 function next() {
   function loop(prev, count) {
     return read().flatMap(c => {
       if (typeof c === 'undefined') return write(count).flatMap(() => write(prev))
       else if (prev === c) return loop(prev, count + 1)
-      else return write(count).flatMap(() => write(prev, loop(c, 1)))
+      else return write(count).flatMap(() => write(prev)).flatMap(() => loop(c, 1))
     })
   }
 
@@ -66,7 +70,6 @@ processes.push(nth(1000000))
 
 run(processes, n => console.log(n))
 
-
 function read() {
   return new Read(x => new Pure(x))
 }
@@ -79,6 +82,7 @@ function run(processes, cb) {
   let stack = []
   while (true) {
     let current = processes.pop()
+    
     if (current instanceof Pure) {        // 지금 프로세스가 종료되었다.
       if (stack.length > 0)               // 아직 읽으려는 process가 있다.
         processes.push(stack.pop()())
