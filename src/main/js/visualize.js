@@ -126,7 +126,7 @@ function emit(action, n, value) {
     } else {
         toRead[n] = false;
     }
-    draw(action, n, value);
+    return draw(action, n, value);
 }
 
 let canvas = document.getElementById('canvas');
@@ -157,18 +157,19 @@ function draw(action, n, value) {
         ctx.fillStyle = "black";
         ctx.fillRect(x, y, s, s);
     }
+    return x > canvas.width;
 }
 
 function color(value) {
-    return 'silver'
-    // return (value == 1) ? 'rgba(255,0,0,0.5)'
-    //         : (value == 2) ? 'rgba(0,255,0,0.5)'
-    //         : 'rgba(0,0,255,0.5)' ;
+    //return 'silver'
+     return (value == 1) ? 'rgb(200,200,200)'
+             : (value == 2) ? 'rgb(150,150,150)'
+             : 'rgb(100,100,100)' ;
 }
 
 let processes = [];
 processes.push(init);
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 50; i++) {
     processes.push(next);
 }
 
@@ -183,10 +184,14 @@ function run() {
     switch (result.action) {
         case 'write':
             if (n + 1 < processes.length) {
-                emit('write', n, result.output);
-                stack[n + 1].input = result.output;
-                //console.log(n, ">>>>", result.output);
-                n++;
+                let filled = emit('write', n, result.output);
+                if (filled) {
+                    console.log("filled", n, processes.length)
+                } else {
+                    stack[n + 1].input = result.output;
+                    //console.log(n, ">>>>", result.output);
+                    n++;
+                }
             } else {
                 //console.log(result.output);
             }
