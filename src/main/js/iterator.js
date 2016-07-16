@@ -7,14 +7,12 @@ function *next(line) {
     if (prev === c)
       count++
     else {
-      yield count
-      yield prev
+      yield* [count, prev]
       prev = c
       count = 1
     }
   }
-  yield count
-  yield prev
+  yield* [count, prev]
 }
 
 function ant(n) {
@@ -47,5 +45,5 @@ function nth(n,gen) {
   return gen.next().value
 }
 
-//print(ant(100))
-console.log(nth(1000000, ant(5941))) // maximum value without StackOverflow
+print(ant(10))
+//console.log(nth(1000000, ant(5941))) // maximum value without StackOverflow
