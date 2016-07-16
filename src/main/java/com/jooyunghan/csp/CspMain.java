@@ -2,7 +2,7 @@ package com.jooyunghan.csp;
 
 
 import static com.jooyunghan.csp.Chan.chan;
-import static com.jooyunghan.csp.GoRoutine.go;
+import static com.jooyunghan.csp.Go.go;
 
 public class CspMain {
     public static void main(String[] args) throws InterruptedException {
@@ -52,10 +52,8 @@ public class CspMain {
                     count = 1;
                 }
             }
-            if (count > 0) {
-                out.send(count);
-                out.send(prev);
-            }
+            out.send(count);
+            out.send(prev);
             out.close();
         });
         return out;
