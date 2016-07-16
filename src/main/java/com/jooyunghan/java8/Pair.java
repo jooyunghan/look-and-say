@@ -8,4 +8,8 @@ public class Pair<T, S> {
         _1 = t;
         _2 = s;
     }
+
+    public static <T,S> Pair<T,S> pair(T t, S s) {
+        return new Pair<>(t,s);
+    }
 }
