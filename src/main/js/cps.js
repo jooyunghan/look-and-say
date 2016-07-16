@@ -1,4 +1,43 @@
 
+// blocking operations
+
+function read(cont) {
+  return { type: 'read', cont }
+}
+
+function write(value, cont) {
+  return { type: 'write', cont, value }
+}
+
+// run multiple processes
+
+/* process는 () => Block | undefined (종료)
+   Block = write next | read next
+ */
+function run(processes) {
+  let blocked = []
+  while (true) {
+    let current = processes.pop()()
+    if (typeof current === 'undefined') { // 지금 프로세스가 종료되었다.
+      if (blocked.length > 0)               // 아직 읽으려는 process가 있다.
+        processes.push(blocked.pop().cont)
+      else                                // 마지막 프로세스가 종료되면 끝이다.
+        break
+    } else if (current.type === 'read') { // 읽으려면 읽기 스택에 넣는다.
+      blocked.push(current)
+    } else {                              // 쓰려면 읽기 스택에서 꺼내 재개한다.
+      processes.push(current.cont)
+      if (blocked.length > 0) {
+        let next = blocked.pop().cont
+        let value = current.value
+        processes.push(() => next(value))
+      } else {                            // 마지막 프로세스에 대해서는 콘솔에 출력한다.
+        console.log(current.value)
+      }
+    }
+  }
+}
+
 function init() {
   return write(1, () => { })
 }
@@ -29,36 +68,5 @@ for (let i = 0; i < 1000000; i++)
   processes.push(next)
 processes.push(() => nth(1000000))
 
-run(processes, n => console.log(n))
+run(processes)
 
-function read(cont) {
-  return { type: 'read', cont }
-}
-
-function write(value, cont) {
-  return { type: 'write', cont, value }
-}
-
-function run(processes, cb) {
-  let stack = []
-  while (true) {
-    let current = processes.pop()()
-    if (typeof current === 'undefined') { // 지금 프로세스가 종료되었다.
-      if (stack.length > 0)               // 아직 읽으려는 process가 있다.
-        processes.push(stack.pop().cont)
-      else                                // 마지막 프로세스가 종료되면 끝이다.
-        break
-    } else if (current.type === 'read') { // 읽으려면 읽기 스택에 넣는다.
-      stack.push(current)
-    } else {                              // 쓰려면 읽기 스택에서 꺼내 재개한다.
-      processes.push(current.cont)
-      if (stack.length > 0) {
-        let next = stack.pop().cont
-        let value = current.value
-        processes.push(() => next(value))
-      } else {                            // 마지막 프로세스에 대해서는 콘솔에 출력한다.
-        cb(current.value)
-      }
-    }
-  }
-}
