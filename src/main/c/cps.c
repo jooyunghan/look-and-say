@@ -62,35 +62,25 @@ int next(state *s) {
 }
 
 int main() {
-  int n = 100000000, m = 100000000;
+  int n = 1000000, m = 1000;
   state* lines = (state*)calloc(n + 1, sizeof(state));
   int cur = n + 1;
   while (1) {
     int result = (cur == 0) ? init(&lines[0]) : next(&lines[cur]);
     switch (result) {
-      case 0: // close
-        if (cur < n) {
-          cur++;
-          lines[cur].next = 0;
-        } else {
-          goto endloop;
-        }
-        break;
       case -1: // read
         cur--;
-        if (cur < 0) {
-          printf("no input available\n");
-          goto endloop;
-        }
         break;
       default: // write 1,2,3
         if (cur < n) {
           cur++;
           lines[cur].next = result;
         } else {
-          if (m-->0) {
-            //printf("%d", result);
-          } else {
+          if (result == 0)
+            goto endloop;
+          else if (m-->0)
+            printf("%d", result);
+          else {
             printf("%d", result);
             goto endloop;
           }
