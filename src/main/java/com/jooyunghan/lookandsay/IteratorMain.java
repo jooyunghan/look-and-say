@@ -3,14 +3,13 @@ package com.jooyunghan.lookandsay;
 import java.util.Iterator;
 
 import static com.jooyunghan.java8.Lists.of;
-import static com.jooyunghan.lookandsay.TailRec.done;
 
 public class IteratorMain {
 
     public static void main(String[] args) {
         Iterator<Integer> ant = of(1).iterator();
 
-        for (int i = 0; i < 5000; i++)
+        for (int i = 0; i < 100; i++)
             ant = new Next(ant);
 
         for (int i = 0; i< 100 ; i++)
