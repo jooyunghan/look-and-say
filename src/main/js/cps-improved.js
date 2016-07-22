@@ -5,6 +5,7 @@
 // 2. Use old `function () {}`s instead of arrow(=>) functions
 // 3. Use top-level functions instead of local(nested) functions
 // 4. Use values for continuation whereever possible instead of functions
+// 5. Reuse functions instead of creating in every steps
 // 20s => 10s
 
 function Read(cont) {
@@ -81,9 +82,13 @@ function loop(prev, count) {
 
 // 한글자씩 읽으며 n을 감소시키다가 n == 0에서 읽은 글자만 출력
 function nth(n) {
-  return read(function (c) {
-    return (n === 0) ? write(c) : nth(n - 1)
-  })
+  return read(handle)
+  function handle(c) {
+    if (n === 0)
+      return write(c)
+    n--
+    return read(handle)
+  }
 }
 
 function ant(n, m) {
